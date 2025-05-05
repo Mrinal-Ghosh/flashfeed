@@ -1,103 +1,104 @@
-import Image from "next/image";
+import { ArticleGrid } from "@/components/news/article-grid"
+
+// Sample data - in a real app, this would come from your API
+const SAMPLE_ARTICLES = [
+  {
+    id: "1",
+    title: "New AI breakthrough could revolutionize healthcare",
+    description:
+      "Researchers have developed a new AI model that can predict disease progression with unprecedented accuracy, potentially transforming early diagnosis and treatment planning.",
+    imageUrl: "https://picsum.photos/400/600",
+    sourceUrl: "https://example.com/article1",
+    sourceName: "Tech Today",
+    publishedAt: "2025-05-01T09:00:00Z",
+    category: "Technology",
+  },
+  {
+    id: "2",
+    title: "Global markets rally as inflation fears ease",
+    description:
+      "Stock markets worldwide saw significant gains as new economic data suggests inflation may be cooling, potentially allowing central banks to ease monetary policy.",
+    imageUrl: "https://picsum.photos/400/600",
+    sourceUrl: "https://example.com/article2",
+    sourceName: "Financial Times",
+    publishedAt: "2025-05-02T14:30:00Z",
+    category: "Business",
+  },
+  {
+    id: "3",
+    title: "Scientists discover potential new treatment for Alzheimer's",
+    description:
+      "A groundbreaking study has identified a compound that appears to slow or even reverse the progression of Alzheimer's disease in early trials.",
+    imageUrl: "https://picsum.photos/400/600",
+    sourceUrl: "https://example.com/article3",
+    sourceName: "Science Daily",
+    publishedAt: "2025-05-03T11:15:00Z",
+    category: "Health",
+  },
+  {
+    id: "4",
+    title: "Climate summit ends with ambitious new targets",
+    description:
+      "World leaders have agreed to more aggressive emissions reduction goals following intense negotiations at the latest international climate conference.",
+    imageUrl: "https://picsum.photos/400/600",
+    sourceUrl: "https://example.com/article4",
+    sourceName: "Environmental News",
+    publishedAt: "2025-05-04T16:45:00Z",
+    category: "World",
+  },
+  {
+    id: "5",
+    title: "Major tech company unveils revolutionary new smartphone",
+    description:
+      "The latest flagship device features groundbreaking battery technology and AI capabilities that could set new standards for the industry.",
+    imageUrl: "https://picsum.photos/400/600",
+    sourceUrl: "https://example.com/article5",
+    sourceName: "Gadget Review",
+    publishedAt: "2025-05-05T10:00:00Z",
+    category: "Technology",
+  },
+  {
+    id: "6",
+    title: "Historic peace agreement signed in long-running conflict",
+    description:
+      "After decades of tension, opposing parties have reached a landmark peace deal that promises to bring stability to the region.",
+    imageUrl: "https://picsum.photos/400/600",
+    sourceUrl: "https://example.com/article6",
+    sourceName: "World News",
+    publishedAt: "2025-05-06T13:20:00Z",
+    category: "Politics",
+  },
+  {
+    id: "7",
+    title: "Breakthrough in renewable energy storage announced",
+    description:
+      "Engineers have developed a new type of battery that could solve one of the biggest challenges in renewable energy adoption.",
+    imageUrl: "https://picsum.photos/400/600",
+    sourceUrl: "https://example.com/article7",
+    sourceName: "Energy News",
+    publishedAt: "2025-05-07T09:30:00Z",
+    category: "Science",
+  },
+  {
+    id: "8",
+    title: "Underdog team wins championship in stunning upset",
+    description:
+      "In one of the biggest surprises in recent sports history, the underdog team overcame overwhelming odds to claim the championship title.",
+    imageUrl: "https://picsum.photos/400/600",
+    sourceUrl: "https://example.com/article8",
+    sourceName: "Sports Center",
+    publishedAt: "2025-05-08T22:15:00Z",
+    category: "Sports",
+  },
+]
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+    <div className="space-y-6">
+      <section>
+        <h2 className="text-2xl font-bold mb-6">Today&lsquo;s Top Stories</h2>
+        <ArticleGrid articles={SAMPLE_ARTICLES} />
+      </section>
     </div>
-  );
+  )
 }
