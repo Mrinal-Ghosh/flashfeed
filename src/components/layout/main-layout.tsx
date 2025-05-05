@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { Navbar } from "@/components/layout/navbar"
-import { AppSidebar } from "@/components/layout/sidebar"
+import { AppSidebar } from "@/components/layout/app-sidebar"
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 
 interface MainLayoutProps {
