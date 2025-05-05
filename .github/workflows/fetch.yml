@@ -1,0 +1,13 @@
+name: Fetch News Feeds
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"  # every 30 minutes
+  workflow_dispatch:
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Hit feed-fetch endpoint
+        run: curl -X POST "https://your-vercel-app.com/api/cron/fetch-feeds?key=YOUR_SECRET"
