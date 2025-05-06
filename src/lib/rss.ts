@@ -1,7 +1,7 @@
   import Parser from "rss-parser";
   import { RSSItem } from "../types";
 
-  const rssParser = new Parser<{},RSSItem>();
+  const rssParser = new Parser<object,RSSItem>();
 
   export async function fetchRSSFeed(url: string): Promise<RSSItem[]> {
     const feed = await rssParser.parseURL(url);
