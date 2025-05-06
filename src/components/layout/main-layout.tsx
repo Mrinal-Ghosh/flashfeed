@@ -21,7 +21,7 @@ export function MainLayout({ children }: MainLayoutProps) {
           </div>
           <SidebarInset className="flex-1">
             <div className="flex items-center p-4 border-b">
-              <SidebarTrigger />
+              <SidebarTrigger className="cursor-pointer" />
               <h1 className="ml-4 text-xl font-semibold">FlashFeed</h1>
             </div>
             <main className="flex-1 p-4 md:p-6">{children}</main>
