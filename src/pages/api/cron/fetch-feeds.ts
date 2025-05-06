@@ -4,6 +4,7 @@ import { fetchTopHeadlines } from "../../../lib/newsapi";
 import {
   upsertRSSArticles,
   upsertNewsAPIArticles,
+  deleteArticles,
 } from "../../../services/article.service";
 
 const RSS_URLS = [
@@ -20,16 +21,20 @@ export default async function handler(
   }
 
   try {
-    // 1) Fetch & upsert RSS
+    // Fetch & upsert RSS
     for (const url of RSS_URLS) {
       const items = await fetchRSSFeed(url);
       await upsertRSSArticles(items);
     }
 
-    // 2) Fetch & upsert NewsAPI
+    // Fetch & upsert NewsAPI
     const newsItems = await fetchTopHeadlines({ country: "us", pageSize: 50 });
     await upsertNewsAPIArticles(newsItems);
-
+    
+    // Purge articles with TTL 7 days
+    const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    await deleteArticles(sevenDaysAgo);
+    
     return res.status(200).json({ success: true, timestamp: new Date() });
   } catch (error) {
     console.error("Fetch-Feeds Error:", error);
