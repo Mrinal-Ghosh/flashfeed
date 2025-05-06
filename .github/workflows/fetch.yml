@@ -10,4 +10,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Hit feed-fetch endpoint
-        run: curl -X POST "https://your-vercel-app.com/api/cron/fetch-feeds?key=x-cron-secret"
+        run: curl -X POST "https://flashfeed-fh5rilw4a-mrinal-dev.vercel.app//api/cron/fetch-feeds?key=x-cron-secret"
