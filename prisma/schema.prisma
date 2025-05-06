@@ -37,6 +37,7 @@ model Article {
   tags         ArticleTag[]
   interactions Interaction[]
   createdAt    DateTime        @default(now())
+  category     String
 }
 
 model Tag {

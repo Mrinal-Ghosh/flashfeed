@@ -1,10 +1,15 @@
 import { PrismaClient } from "@prisma/client";
 import { RSSItem, NewsAPIArticle } from "../types";
 import { tagArticle } from "./tag.service";
+import { guessCategory } from "@/lib/tags";
 
 const prisma = new PrismaClient();
 
 function mapRSS(item: RSSItem) {
+  const text = (item.title + " " + (item.content || item.description)).slice(
+    0,
+    1000
+  );
   return {
     externalId: item.guid,
     source: "RSS",
@@ -13,10 +18,15 @@ function mapRSS(item: RSSItem) {
     url: item.link,
     urlToImage: null,
     publishedAt: item.isoDate ? new Date(item.isoDate) : new Date(),
+    category: guessCategory(text),
   };
 }
 
 function mapNewsAPI(item: NewsAPIArticle) {
+  const text = (item.title + " " + (item.content || item.description)).slice(
+    0,
+    1000
+  );
   return {
     externalId: item.url,
     source: item.source.name,
@@ -25,6 +35,7 @@ function mapNewsAPI(item: NewsAPIArticle) {
     url: item.url,
     urlToImage: item.urlToImage,
     publishedAt: new Date(item.publishedAt),
+    category: guessCategory(text),
   };
 }
 
@@ -50,4 +61,12 @@ export async function upsertNewsAPIArticles(items: NewsAPIArticle[]) {
     });
     await tagArticle(article.id, article.title, article.content || "");
   }
+}
+
+export async function deleteArticles(time: Date) {
+  await prisma.article.deleteMany({
+    where: {
+      publishedAt: { lt: time },
+    },
+  });
 }

@@ -10,4 +10,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Hit feed-fetch endpoint
-        run: curl -X POST "https://your-vercel-app.com/api/cron/fetch-feeds?key=YOUR_SECRET"
+        run: curl -X POST "https://your-vercel-app.com/api/cron/fetch-feeds?key=x-cron-secret"
