@@ -1,12 +1,13 @@
 import { ArticleGrid } from "@/components/news/article-grid";
 import { prisma } from "@/lib/prisma";
 
-interface SearchPageProps {
-  searchParams: Record<string, string | string[] | undefined>;
-}
 
-export default async function SearchPage({ searchParams }: SearchPageProps) {
-  const rawQuery = searchParams.q;
+export default async function SearchPage({      //? Try naming the component Page
+  searchParams,
+}: {
+  searchParams?: Record<string, string | string[]>;
+}) {
+  const rawQuery = searchParams?.q;
   const query = typeof rawQuery === "string" ? rawQuery.trim() : "";
 
   const articles = query
