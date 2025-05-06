@@ -1,18 +1,18 @@
-import { ArticleCard } from "@/components/news/article-card"
+import { ArticleCard } from "@/components/news/article-card";
 
 interface Article {
-  id: string
-  title: string
-  description: string
-  imageUrl: string
-  sourceUrl: string
-  sourceName: string
-  publishedAt: string
-  category: string
+  id: string;
+  title: string;
+  content: string | null;
+  urlToImage: string | null;
+  url: string;
+  source: string;
+  publishedAt: Date;
+  category: string;
 }
 
 interface ArticleGridProps {
-  articles: Article[]
+  articles: Article[];
 }
 
 export function ArticleGrid({ articles }: ArticleGridProps) {
@@ -22,5 +22,5 @@ export function ArticleGrid({ articles }: ArticleGridProps) {
         <ArticleCard key={article.id} article={article} />
       ))}
     </div>
-  )
+  );
 }
