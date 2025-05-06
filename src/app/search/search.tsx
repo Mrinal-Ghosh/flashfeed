@@ -1,8 +1,10 @@
+export const dynamic = "force-dynamic";
+
 import { ArticleGrid } from "@/components/news/article-grid";
 import { prisma } from "@/lib/prisma";
 
-
-export default async function SearchPage({      //? Try naming the component Page
+export default async function SearchPage({
+  //? Try naming the component Page
   searchParams,
 }: {
   searchParams?: Record<string, string | string[]>;

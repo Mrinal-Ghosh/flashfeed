@@ -1,4 +1,6 @@
-import { ArticleGrid } from "@/components/news/article-grid"; 
+export const dynamic = "force-dynamic";
+
+import { ArticleGrid } from "@/components/news/article-grid";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 
@@ -12,14 +14,14 @@ const TOPICS = [
   { name: "Entertainment", slug: "entertainment" },
 ];
 
-interface TopicPageProps { 
+interface TopicPageProps {
   params: {
     slug: string;
   };
 }
 
-
-export default async function TopicPage({ params }: TopicPageProps) {     //? Try naming the component Page
+export default async function TopicPage({ params }: TopicPageProps) {
+  //? Try naming the component Page
   const topic = TOPICS.find((t) => t.slug === params.slug);
 
   if (!topic) {
