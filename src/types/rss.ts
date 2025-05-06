@@ -4,5 +4,5 @@ export interface RSSItem {
   content?: string;
   link: string;
   isoDate?: string; // ISO timestamp
-  [key: string]: any; // other RSS fields
+  [key: string]: unknown; // other RSS fields
 }
