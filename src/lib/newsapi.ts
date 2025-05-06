@@ -1,6 +1,5 @@
 import axios from "axios";
 import { NewsAPIArticle } from "../types";
-import { count } from "console";
 
 const API_KEY = process.env.NEWSAPI_KEY;
 const BASE_URL = "https://newsapi.org/v2";
