@@ -206,7 +206,6 @@ This project is open-source under the [MIT License](LICENSE).
 * [NewsAPI](https://newsapi.org/)
 * RSS Feeds from various open sources
 
-```
 
 ---
 
