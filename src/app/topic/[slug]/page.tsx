@@ -15,14 +15,14 @@ const TOPICS = [
 ];
 
 interface TopicPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export default async function TopicPage({ params }: TopicPageProps) {
-  //? Try naming the component Page
-  const topic = TOPICS.find((t) => t.slug === params.slug);
+  const { slug } = await params;
+  const topic = TOPICS.find((t) => t.slug === slug);
 
   if (!topic) {
     notFound();

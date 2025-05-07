@@ -3,13 +3,9 @@ export const dynamic = "force-dynamic";
 import { ArticleGrid } from "@/components/news/article-grid";
 import { prisma } from "@/lib/prisma";
 
-export default async function SearchPage({
-  //? Try naming the component Page
-  searchParams,
-}: {
-  searchParams?: Record<string, string | string[]>;
-}) {
-  const rawQuery = searchParams?.q;
+export default async function SearchPage({searchParams}: {searchParams: Promise<Record<string, string | string[]>>;}) {
+  const { q } = await searchParams;
+  const rawQuery = q;
   const query = typeof rawQuery === "string" ? rawQuery.trim() : "";
 
   const articles = query
