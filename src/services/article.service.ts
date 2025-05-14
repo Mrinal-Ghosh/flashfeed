@@ -47,6 +47,7 @@ export async function upsertRSSArticles(items: RSSItem[]) {
       update: data,
       create: data,
     });
+    console.log(`Upserting article: ${data.title}, published at ${data.publishedAt}`);
     await tagArticle(article.id, article.title, article.content || "");
   }
 }
@@ -59,6 +60,7 @@ export async function upsertNewsAPIArticles(items: NewsAPIArticle[]) {
       update: data,
       create: data,
     });
+    console.log(`Upserting article: ${data.title}, published at ${data.publishedAt}`);
     await tagArticle(article.id, article.title, article.content || "");
   }
 }
