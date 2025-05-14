@@ -3,7 +3,7 @@ export const dynamic = "force-dynamic";
 import { ArticleGrid } from "@/components/news/article-grid";
 import { prisma } from "@/lib/prisma";
 
-const articles = await prisma.article.findMany({
+const articles = await prisma.article.findMany({      //TODO: Add pagination
   orderBy: { publishedAt: "desc" },
   take: 12,
   select: {
