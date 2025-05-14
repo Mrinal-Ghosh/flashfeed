@@ -8,24 +8,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model User {
-  id           String        @id @default(cuid())
-  email        String        @unique
-  name         String?
-  preferences  Preference[]
-  interactions Interaction[]
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-}
-
-model Preference {
-  id        String   @id @default(cuid())
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String
-  topic     String
-  createdAt DateTime @default(now())
-}
-
 model Article {
   id           String        @id @default(cuid())
   externalId   String
@@ -35,40 +17,54 @@ model Article {
   url          String        @unique
   urlToImage   String?
   publishedAt  DateTime
-  tags         ArticleTag[]
-  interactions Interaction[]
   createdAt    DateTime      @default(now())
   category     String
+
+  //relations
+  readHistory ReadingHistory[] 
+  savedBy     SavedArticle[]
 }
 
-model Tag {
-  id       String       @id @default(cuid())
-  name     String       @unique
-  articles ArticleTag[]
+model User {
+  clerkId      String        @id
+  email        String        @unique
+  name         String?
+  createdAt    DateTime      @default(now())
+
+  //relations
+  preferences  Preference[]
+  savedArticles  SavedArticle[]
+  readingHistory ReadingHistory[] 
+  
 }
 
-model ArticleTag {
-  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
-  articleId String
-  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
-  tagId     String
-
-  @@id([articleId, tagId])
+model Preference {
+  id            String    @id @default(uuid())
+  user          User      @relation(fields: [userClerkId], references: [clerkId])
+  userClerkId   String    @unique
+  categories    String[]  @default([])
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 }
 
-enum InteractionType {
-  CLICK
-  LIKE
-  SHARE
+model SavedArticle {
+  id            String    @id @default(uuid())
+  user          User      @relation(fields: [userClerkId], references: [clerkId])
+  userClerkId   String
+  article       Article   @relation(fields: [articleId], references: [id])
+  articleId     String
+  savedAt       DateTime  @default(now())
+
+  @@unique([userClerkId, articleId])
 }
 
-model Interaction {
-  id        String          @id @default(cuid())
-  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String
-  article   Article         @relation(fields: [articleId], references: [id], onDelete: Cascade)
-  articleId String
-  type      InteractionType
-  duration  Int? // seconds spent reading
-  createdAt DateTime        @default(now())
+model ReadingHistory {
+  id            String    @id @default(uuid())
+  user          User      @relation(fields: [userClerkId], references: [clerkId])
+  userClerkId   String
+  article       Article   @relation(fields: [articleId], references: [id])
+  articleId     String
+  readAt        DateTime  @default(now())
 }
+
+//TODO: Implement interaction types
