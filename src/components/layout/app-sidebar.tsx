@@ -18,16 +18,13 @@ import {
 } from "@/components/ui/sidebar"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 
-// Sample topics - in a real app, these would come from your API/database
-const TOPICS = [
+const TOPICS = [                                    //TODO: Use constant single source of truth for this, same referenced in TopicPage
   { name: "Technology", slug: "technology" },
   { name: "Business", slug: "business" },
   { name: "Science", slug: "science" },
   { name: "Health", slug: "health" },
   { name: "Sports", slug: "sports" },
   { name: "Entertainment", slug: "entertainment" },
-  { name: "Politics", slug: "politics" },
-  { name: "World", slug: "world" },
 ]
 
 export function AppSidebar() {

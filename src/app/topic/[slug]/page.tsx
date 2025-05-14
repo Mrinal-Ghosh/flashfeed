@@ -4,7 +4,6 @@ import { ArticleGrid } from "@/components/news/article-grid";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 
-// Sample data - in a real app, this would come from your API
 const TOPICS = [
   { name: "Technology", slug: "technology" },
   { name: "Business", slug: "business" },
