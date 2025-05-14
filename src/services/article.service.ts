@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 import { RSSItem, NewsAPIArticle } from "../types";
-import { tagArticle } from "./tag.service";
 import { guessCategory } from "@/lib/tags";
 
 const prisma = new PrismaClient();
@@ -42,26 +41,24 @@ function mapNewsAPI(item: NewsAPIArticle) {
 export async function upsertRSSArticles(items: RSSItem[]) {
   for (const raw of items) {
     const data = mapRSS(raw);
-    const article= await prisma.article.upsert({
+    await prisma.article.upsert({
       where: { url: data.url },
       update: data,
       create: data,
     });
     console.log(`Upserting article: ${data.title}, published at ${data.publishedAt}`);
-    await tagArticle(article.id, article.title, article.content || "");
   }
 }
 
 export async function upsertNewsAPIArticles(items: NewsAPIArticle[]) {
   for (const raw of items) {
     const data = mapNewsAPI(raw);
-    const article = await prisma.article.upsert({
+    await prisma.article.upsert({
       where: { url: data.url },
       update: data,
       create: data,
     });
     console.log(`Upserting article: ${data.title}, published at ${data.publishedAt}`);
-    await tagArticle(article.id, article.title, article.content || "");
   }
 }
 
