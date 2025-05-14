@@ -8,6 +8,7 @@ on:
 jobs:
   fetch:
     runs-on: ubuntu-latest
+    environment: production
     steps:
       - name: Hit feed-fetch endpoint
         run: curl "https://flashfeed-site.vercel.app/api/cron/fetch-feeds?key=${{ secrets.CRON_SECRET }}"
