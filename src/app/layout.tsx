@@ -5,6 +5,7 @@ import "./globals.css";
 import { MainLayout } from "@/components/layout/main-layout";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,6 +30,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <MainLayout>{children}</MainLayout>
+            <Toaster />
           </ThemeProvider>
         </body>
       </html>
