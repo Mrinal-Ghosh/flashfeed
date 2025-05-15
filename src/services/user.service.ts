@@ -13,6 +13,8 @@ export const PreferencesService = {
   },
 };
 
+
+//* Saved article queries
 export const SavedArticlesService = {
   async list(userClerkId: string) {
     return prisma.savedArticle.findMany({
@@ -32,6 +34,7 @@ export const SavedArticlesService = {
   },
 };
 
+//* Reading history queries
 export const ReadingHistoryService = {
   async record(userClerkId: string, articleId: string) {
     return prisma.readingHistory.create({
