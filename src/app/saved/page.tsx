@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 import { ArticleGrid } from "@/components/news/article-grid";
 import { Button } from "@/components/ui/button";
 import { Bookmark, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
-import { Skeleton } from "@/components/ui/skeleton";
+import { ArticleGridSkeleton } from "@/components/news/article-grid-skeleton";
 import { Article } from "@/types";
 import Link from "next/link";
 
@@ -21,7 +22,15 @@ export default function SavedArticlesPage() {
   const [savedArticles, setSavedArticles] = useState<SavedArticle[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const { isSignedIn, user } = useUser();
+  const { isSignedIn, user, isLoaded } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    // Redirect if user is not signed in and auth has loaded
+    if (isLoaded && !isSignedIn) {
+      router.push("/login");
+    }
+  }, [isLoaded, isSignedIn, router]);
 
   const fetchSavedArticles = async () => {
     if (!isSignedIn || !user) return;
@@ -52,7 +61,9 @@ export default function SavedArticlesPage() {
   };
 
   useEffect(() => {
-    fetchSavedArticles();
+    if (isSignedIn && user) {
+      fetchSavedArticles();
+    }
   }, [isSignedIn, user]);
 
   const handleSaveToggle = async (articleId: string, isSaved: boolean) => {
@@ -63,6 +74,10 @@ export default function SavedArticlesPage() {
       );
     }
   };
+
+  if (!isLoaded) {
+    return <ArticleGridSkeleton />;
+  }
 
   // Map saved articles to the format expected by ArticleGrid
   const articles = savedArticles.map((item) => ({
@@ -94,17 +109,7 @@ export default function SavedArticlesPage() {
       </div>
 
       {isLoading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className="space-y-3">
-              <Skeleton className="h-48 w-full rounded-lg" />
-              <Skeleton className="h-6 w-3/4" />
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-2/3" />
-            </div>
-          ))}
-        </div>
+        <ArticleGridSkeleton />
       ) : articles.length > 0 ? (
         <ArticleGrid articles={articles} onSaveToggle={handleSaveToggle} />
       ) : (
@@ -116,7 +121,7 @@ export default function SavedArticlesPage() {
             icon on any article card
           </p>
           <Button asChild>
-            <Link href="/">Browse articles</Link >
+            <Link href="/">Browse articles</Link>
           </Button>
         </div>
       )}

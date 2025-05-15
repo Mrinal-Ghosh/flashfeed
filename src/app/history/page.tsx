@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 import { ArticleCard } from "@/components/news/article-card";
 import { Button } from "@/components/ui/button";
 import { History, RefreshCw, Clock } from "lucide-react";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ArticleGridSkeleton } from "@/components/news/article-grid-skeleton";
 import {
   format,
   isToday,
@@ -29,7 +31,15 @@ export default function ReadingHistoryPage() {
   const [historyItems, setHistoryItems] = useState<ReadingHistoryItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const { isSignedIn, user } = useUser();
+  const { isSignedIn, user, isLoaded } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    // Redirect if user is not signed in and auth has loaded
+    if (isLoaded && !isSignedIn) {
+      router.push("/login");
+    }
+  }, [isLoaded, isSignedIn, router]);
 
   const fetchReadingHistory = async () => {
     if (!isSignedIn || !user) return;
@@ -60,8 +70,14 @@ export default function ReadingHistoryPage() {
   };
 
   useEffect(() => {
-    fetchReadingHistory();
+    if (isSignedIn && user) {
+      fetchReadingHistory();
+    }
   }, [isSignedIn, user]);
+
+  if (!isLoaded) {
+    return <ArticleGridSkeleton />;
+  }
 
   // Group history items by time period
   const groupedHistory = historyItems.reduce((groups, item) => {
@@ -117,17 +133,7 @@ export default function ReadingHistoryPage() {
           {Array.from({ length: 3 }).map((_, groupIndex) => (
             <div key={groupIndex} className="space-y-4">
               <Skeleton className="h-6 w-32" />
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {Array.from({ length: 4 }).map((_, i) => (
-                  <div key={i} className="space-y-3">
-                    <Skeleton className="h-48 w-full rounded-lg" />
-                    <Skeleton className="h-6 w-3/4" />
-                    <Skeleton className="h-4 w-full" />
-                    <Skeleton className="h-4 w-full" />
-                    <Skeleton className="h-4 w-2/3" />
-                  </div>
-                ))}
-              </div>
+              <ArticleGridSkeleton />
             </div>
           ))}
         </div>
