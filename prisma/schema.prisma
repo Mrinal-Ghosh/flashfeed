@@ -49,9 +49,9 @@ model Preference {
 
 model SavedArticle {
   id            String    @id @default(uuid())
-  user          User      @relation(fields: [userClerkId], references: [clerkId])
+  user          User      @relation(fields: [userClerkId], references: [clerkId], onDelete: Cascade)
   userClerkId   String
-  article       Article   @relation(fields: [articleId], references: [id])
+  article       Article   @relation(fields: [articleId], references: [id], onDelete: Cascade)
   articleId     String
   savedAt       DateTime  @default(now())
 
@@ -60,9 +60,9 @@ model SavedArticle {
 
 model ReadingHistory {
   id            String    @id @default(uuid())
-  user          User      @relation(fields: [userClerkId], references: [clerkId])
+  user          User      @relation(fields: [userClerkId], references: [clerkId], onDelete: Cascade)
   userClerkId   String
-  article       Article   @relation(fields: [articleId], references: [id])
+  article       Article   @relation(fields: [articleId], references: [id], onDelete: Cascade)
   articleId     String
   readAt        DateTime  @default(now())
 }
