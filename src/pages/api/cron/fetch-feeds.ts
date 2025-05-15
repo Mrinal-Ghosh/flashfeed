@@ -9,7 +9,7 @@ import {
 
 const RSS_URLS = [
   "http://rss.cnn.com/rss/edition.rss",
-  // add more feeds here
+  //TODO: add more feeds here
 ];
 
 export default async function handler(

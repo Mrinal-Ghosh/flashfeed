@@ -27,7 +27,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
       <Card className="h-full overflow-hidden transition-all hover:shadow-md">
         <div className="relative h-48 w-full overflow-hidden">
           <img
-            src={article.urlToImage || "/placeholder.svg?height=400&width=600"}
+            src={article.urlToImage || "/placeholder.svg?height=400&width=600"}         //TODO: Use real placeholder
             alt={article.title}
             className="object-cover transition-transform group-hover:scale-105"
           />
