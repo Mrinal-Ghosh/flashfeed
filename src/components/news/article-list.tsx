@@ -2,19 +2,26 @@
 
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { ArticleGrid } from "@/components/news/article-grid";
 import { useSavedArticles } from "@/hooks/use-saved-articles";
 import { Article } from "@/types";
+import { PaginationControls } from "@/components/news/pagination-controls";
 
 // Define the article type based on your database schema
 
 // Props for the component
 interface ArticleListProps {
   initialArticles: Article[];
+  currentPage: number;
+  totalPages: number;
 }
 
-export function ArticleList({ initialArticles }: ArticleListProps) {
+export function ArticleList({
+  initialArticles,
+  currentPage,
+  totalPages,
+}: ArticleListProps) {
   // Transform database articles to match the format expected by ArticleGrid
   const transformArticles = (articles: Article[], savedIds: Set<string>) => {
     return articles.map((article) => ({
@@ -33,9 +40,11 @@ export function ArticleList({ initialArticles }: ArticleListProps) {
   const [articles, setArticles] = useState(() =>
     transformArticles(initialArticles, new Set())
   );
+  const [isChangingPage, setIsChangingPage] = useState(false);
 
   const { isSignedIn, isLoaded } = useUser();
   const router = useRouter();
+  const pathname = usePathname();
   const {
     isArticleSaved,
     toggleSaved,
@@ -78,11 +87,42 @@ export function ArticleList({ initialArticles }: ArticleListProps) {
     console.log(`Article clicked: ${articleId}`);
   };
 
+  const handlePageChange = (newPage: number) => {
+    if (newPage === currentPage) return;
+
+    setIsChangingPage(true);
+
+    // Update the URL with the new page number
+    const params = new URLSearchParams();
+    if (newPage > 1) {
+      params.set("page", newPage.toString());
+    }
+
+    // Navigate to the new page
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
   return (
-    <ArticleGrid
-      articles={articles}
-      onSaveToggle={handleSaveToggle}
-      onArticleClick={handleArticleClick}
-    />
+    <div className="space-y-6">
+      <PaginationControls
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+        isLoading={isChangingPage}
+      />
+
+      <ArticleGrid
+        articles={articles}
+        onSaveToggle={handleSaveToggle}
+        onArticleClick={handleArticleClick}
+      />
+
+      <PaginationControls
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+        isLoading={isChangingPage}
+      />
+    </div>
   );
 }
