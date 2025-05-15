@@ -1,5 +1,6 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { clerkClient, clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
+import { UserService } from "@/services/user.service";
 
 const isProtectedRoute = createRouteMatcher([
   "/api/preferences/:path*",
@@ -9,6 +10,16 @@ const isProtectedRoute = createRouteMatcher([
 
 export default clerkMiddleware(async (auth, req) => {
   const { userId } = await auth();
+
+  if (userId) {
+    const clerk = await clerkClient();
+    const user = await clerk.users.getUser(userId);
+
+    const email = user.emailAddresses[0]?.emailAddress;
+    if (email) {
+      await UserService.upsertUser(userId, email);
+    }
+  }
 
   if (isProtectedRoute(req) && !userId) {
     await auth.protect(); // redirects anonymous users to /sign-in by default
