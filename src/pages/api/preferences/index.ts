@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { PreferencesService } from "../../../services/user.service";
+import { ensureUserExists } from "@/services/user.service";
 
 export default async function handler(
   req: NextApiRequest,
@@ -7,6 +8,8 @@ export default async function handler(
 ) {
   const userClerkId = req.headers["x-user-id"] as string;
   if (!userClerkId) return res.status(401).json({ error: "Unauthorized" });
+
+  await ensureUserExists(userClerkId);
 
   if (req.method === "GET") {
     const prefs = await PreferencesService.get(userClerkId);

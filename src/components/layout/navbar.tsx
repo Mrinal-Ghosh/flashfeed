@@ -4,6 +4,7 @@ import type React from "react";
 
 import Link from "next/link";
 import { Menu, Search } from "lucide-react";
+import PreferencesChecklist from "../user/PreferencesChecklist";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,23 +15,63 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  SignInButton,
-  UserButton,
-  useUser,
-} from "@clerk/nextjs";
+import { SignInButton, UserButton, useUser } from "@clerk/nextjs";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
   const { isSignedIn } = useUser();
+  const [showPreferences, setShowPreferences] = useState(false);
+
+  //pref cache
+  const [prefLoading, setPrefLoading] = useState(false);
+  const [prefLoaded, setPrefLoaded] = useState(false);
+  const [prefCategories, setPrefCategories] = useState<string[] | undefined>(
+    undefined
+  );
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
+    }
+  };
+
+  const openPreferences = async () => {
+    // Toggle the panel open/close
+    const opening = !showPreferences;
+    setShowPreferences(opening);
+
+    // If opening and not loaded yet, fetch preferences once
+    if (opening && !prefLoaded && !prefLoading) {
+      setPrefLoading(true);
+      try {
+        const res = await fetch("/api/preferences", {
+          method: "GET",
+          credentials: "same-origin",
+          cache: "no-store", // force fresh body (avoid 304)
+        });
+
+        if (!res.ok) {
+          // server returned non-2xx — throw to show toast
+          const body = await res.json().catch(() => ({}));
+          throw new Error(body?.error || `Status ${res.status}`);
+        }
+
+        const body = await res.json();
+        const categories: string[] = body?.data?.categories ?? [];
+        setPrefCategories(categories);
+        setPrefLoaded(true);
+      } catch (err) {
+        console.error("Failed to load preferences:", err);
+        toast.error("Failed to load preferences");
+        // still leave menu open so user can interact
+      } finally {
+        setPrefLoading(false);
+      }
     }
   };
 
@@ -97,6 +138,34 @@ export function Navbar() {
                       Reading History
                     </Link>
                   </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    className="cursor-pointer"
+                    onSelect={(event: Event) => {
+                      event.preventDefault();
+                      openPreferences();
+                    }}
+                  >
+                    <span>Preferences</span>
+                    <span className="text-xs text-muted-foreground">
+                      {showPreferences ? "Close" : "Open"}
+                    </span>
+                  </DropdownMenuItem>
+                  {showPreferences && (
+                    <>
+                      <div className="px-3 py-2">
+                        <PreferencesChecklist
+                          initialCategories={prefCategories}
+                          onSaved={(savedCategories) => {
+                            setPrefCategories(savedCategories);
+                            setPrefLoaded(true);
+                            setShowPreferences(false);
+                          }}
+                        />
+                      </div>
+                      <DropdownMenuSeparator />
+                    </>
+                  )}
                   <DropdownMenuItem asChild>
                     <Link href="/settings" className="cursor-pointer">
                       Settings
