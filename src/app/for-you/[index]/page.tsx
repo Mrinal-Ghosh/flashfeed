@@ -5,11 +5,12 @@ import { ArticleGrid } from "@/components/news/article-grid";
 import { redirect } from "next/navigation";
 
 type Props = {
-  params: { index: string };
+  params: Promise<{ index: string }>;
 };
 
 export default async function ForYouPage({ params }: Props) {
-  const page = parseInt(params.index, 10);
+  const {index} = await params;
+  const page = parseInt(index, 10);
 
   if (isNaN(page) || page < 1) {
     redirect("/for-you/1");
