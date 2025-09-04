@@ -116,7 +116,7 @@ export function ArticleCard({
       onArticleClick(article.id);
     }
   };
-  
+
   return (
     <a
       href={article.url}
@@ -126,12 +126,23 @@ export function ArticleCard({
       onClick={handleArticleClick}
     >
       <Card className="h-full overflow-hidden transition-all hover:shadow-md relative">
-        <div className="relative h-48 w-full overflow-hidden">
-          <img
-            src={article.urlToImage || "/placeholder.svg?height=400&width=600"} //TODO: Use real placeholder
-            alt={article.title}
-            className="object-cover transition-transform group-hover:scale-105"
-          />
+        {article.urlToImage ? (
+          <div className="relative h-48 w-full overflow-hidden">
+            <img
+              src={article.urlToImage}
+              alt={article.title}
+              className="object-cover transition-transform group-hover:scale-105 w-full h-full"
+            />
+            <div className="absolute top-2 right-2">
+              <Badge
+                variant="secondary"
+                className="bg-background/80 backdrop-blur-sm"
+              >
+                {article.category}
+              </Badge>
+            </div>
+          </div>
+        ) : (
           <div className="absolute top-2 right-2">
             <Badge
               variant="secondary"
@@ -140,7 +151,7 @@ export function ArticleCard({
               {article.category}
             </Badge>
           </div>
-        </div>
+        )}
 
         <CardContent className="p-4">
           <h3 className="line-clamp-2 text-lg font-semibold mb-2 group-hover:text-primary">
