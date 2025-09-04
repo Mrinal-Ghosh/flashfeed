@@ -1,17 +1,5 @@
 import { prisma } from "@/lib/prisma";
 
-//* User queries
-export const UserService = {
-  async upsertUser(clerkUserId: string, email: string) {
-    return prisma.user.upsert({
-      where: { clerkId: clerkUserId },
-      create: { clerkId: clerkUserId, email },
-      update: { email },
-    });
-  },
-};
-
-//* Preferences queries
 export const PreferencesService = {
   async get(userClerkId: string) {
     return prisma.preference.findUnique({ where: { userClerkId } });
@@ -24,6 +12,7 @@ export const PreferencesService = {
     });
   },
 };
+
 
 //* Saved article queries
 export const SavedArticlesService = {
