@@ -1,11 +1,12 @@
 "use client";
 
-import { useAuth } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
+
 
 export default function ProfilePage() {
-  const { userId } = useAuth();
+  const {user, isLoaded, isSignedIn} = useUser();
+  if (!isLoaded) return <div>Loading...</div>;
+  if (!isSignedIn) return <div>Please sign in</div>;
 
-  if (!userId) return <div>Please sign in</div>;
-
-  return <div>Welcome, user {userId}!</div>;
+  return <div>Welcome, {user.firstName}!</div>;
 }
