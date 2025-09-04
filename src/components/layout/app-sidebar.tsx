@@ -41,16 +41,16 @@ export function AppSidebar() {
             <SidebarMenuItem>
               <SidebarMenuButton asChild>
                 <Link href="/">
-                  <Home className="h-5 w-5" />
-                  <span>Home</span>
+                  <TrendingUp className="h-5 w-5" />
+                  <span>Top Stories</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
               <SidebarMenuButton asChild>
-                <Link href="/popular">
-                  <TrendingUp className="h-5 w-5" />
-                  <span>Popular</span>
+                <Link href="/for-you">
+                  <Home className="h-5 w-5" />
+                  <span>For You</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
