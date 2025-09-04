@@ -52,7 +52,7 @@ export function ArticleCard({
 
       if (saved) {
         // Remove from saved
-        await fetch("/api/saved", {
+        await fetch("/api/saved-articles", {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
@@ -66,7 +66,7 @@ export function ArticleCard({
         });
       } else {
         // Add to saved
-        await fetch("/api/saved", {
+        await fetch("/api/saved-articles", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

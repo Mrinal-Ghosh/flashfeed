@@ -37,7 +37,7 @@ export function useSavedArticles() {
     }
 
     try {
-      const response = await fetch("/api/saved", {
+      const response = await fetch("/api/saved-articles", {
         headers: {
           "x-user-id": user.id,
         },
@@ -73,7 +73,7 @@ export function useSavedArticles() {
     }
 
     try {
-      const response = await fetch("/api/saved", {
+      const response = await fetch("/api/saved-articles", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -105,7 +105,7 @@ export function useSavedArticles() {
     if (!isSignedIn || !user) return false;
 
     try {
-      const response = await fetch("/api/saved", {
+      const response = await fetch("/api/saved-articles", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

@@ -1,4 +1,32 @@
 import { prisma } from "@/lib/prisma";
+import { clerkClient } from "@clerk/nextjs/server";
+
+export async function ensureUserExists(userClerkId: string) {
+  // Try to get Clerk user info (name, email) to store locally if needed.
+  let clerkUser;
+  const clerk = await clerkClient();
+  try {
+    clerkUser = await clerk.users.getUser(userClerkId);
+  } catch (err) {
+    console.error("Failed to fetch Clerk user", err);
+    // If clerk user can't be fetched, still allow DB upsert with minimal info.
+    clerkUser = undefined;
+  }
+
+  return prisma.user.upsert({
+    where: { clerkId: userClerkId },
+    create: {
+      clerkId: userClerkId,
+      email: clerkUser?.primaryEmailAddress?.emailAddress ?? "",    //!Warning: empty string needs to be handled in edge case
+      name: clerkUser?.firstName ? `${clerkUser.firstName} ${clerkUser.lastName ?? ""}`.trim() : undefined,
+    },
+    update: {
+      // Optionally keep basic record in sync
+      email: clerkUser?.primaryEmailAddress?.emailAddress ?? undefined,
+      name: clerkUser?.firstName ? `${clerkUser.firstName} ${clerkUser.lastName ?? ""}`.trim() : undefined,
+    },
+  });
+}
 
 export const PreferencesService = {
   async get(userClerkId: string) {

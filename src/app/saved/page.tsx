@@ -37,7 +37,7 @@ export default function SavedArticlesPage() {
 
     try {
       setIsRefreshing(true);
-      const response = await fetch("/api/saved", {
+      const response = await fetch("/api/saved-articles", {
         headers: {
           "x-user-id": user.id,
         },
